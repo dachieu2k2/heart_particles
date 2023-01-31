@@ -80,10 +80,15 @@ const HeartParticles = () => {
     ).position.needsUpdate = true;
   });
 
-  useFrame(({ camera, mouse }) => {
+  useFrame(({ camera, mouse, size }) => {
+    // console.log(size);
+
     if (points.current) {
       camera.lookAt(points.current.position);
-      camera.position.lerp(new Vector3(0.5, 0.5, 5.5), 0.003);
+      camera.position.lerp(
+        new Vector3(0.5, 0.5, size.width >= 640 ? 6.5 : 11),
+        0.003
+      );
       camera.updateProjectionMatrix();
     } else {
     }

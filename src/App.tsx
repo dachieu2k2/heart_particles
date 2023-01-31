@@ -9,7 +9,7 @@ import Heart from "./Components/heartParticles/heart";
 
 function App() {
   return (
-    <Canvas camera={{ fov: 45, position: [0, 0, 0] }}>
+    <Canvas camera={{ fov: 45, position: [0, 0, 0] }} gl={{ antialias: false }}>
       {/* <Plane /> */}
       {/* <Blob /> */}
       {/* <BoxParticles /> */}
