@@ -86,7 +86,7 @@ const HeartParticles = () => {
     if (points.current) {
       camera.lookAt(points.current.position);
       camera.position.lerp(
-        new Vector3(0.5, 0.5, size.width >= 640 ? 6.5 : 11),
+        new Vector3(0.5, 0.5, size.width >= 640 ? 6.5 : 12),
         0.003
       );
       camera.updateProjectionMatrix();
