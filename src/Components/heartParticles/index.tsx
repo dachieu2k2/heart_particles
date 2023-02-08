@@ -61,18 +61,36 @@ const HeartParticles = () => {
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
 
+      const x = points.current!.geometry.attributes.position.array[i3 + 0];
+      const y = points.current!.geometry.attributes.position.array[i3 + 1];
+      const z = points.current!.geometry.attributes.position.array[i3 + 2];
+
       // (points.current?.geometry.attributes.position.array as number[])[
       //   i3 + 0
       // ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
       // (points.current?.geometry.attributes.position.array as number[])[
       //   i3 + 1
       // ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
-      (points.current?.geometry.attributes.position.array as number[])[
-        i3 + 1
-      ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
-      (points.current?.geometry.attributes.position.array as number[])[
-        i3 + 2
-      ] += Math.cos(clock.elapsedTime) * Math.random() * 0.001;
+      // (points.current?.geometry.attributes.position.array as number[])[
+      //   i3 + 1
+      // ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
+      // (points.current?.geometry.attributes.position.array as number[])[
+      //   i3 + 2
+      // ] += Math.cos(clock.elapsedTime) * Math.random() * 0.001;
+
+      const distanceFactor =
+        radius - Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+      const angle = clock.getElapsedTime() * 0.000002 * distanceFactor;
+      const s = Math.sin(angle);
+      const c = Math.cos(angle);
+      // console.log(angle);
+
+      (points.current!.geometry.attributes.position.array[i3 + 0] as number) =
+        x * c + y * 0 + z * s;
+      (points.current!.geometry.attributes.position.array[i3 + 1] as number) =
+        x * 0.0 + y * 1 + z * 0;
+      (points.current!.geometry.attributes.position.array[i3 + 2] as number) =
+        x * -s + y * 0 + z * c;
     }
 
     (
@@ -86,7 +104,7 @@ const HeartParticles = () => {
     if (points.current) {
       camera.lookAt(points.current.position);
       camera.position.lerp(
-        new Vector3(0.5, 0.5, size.width >= 640 ? 6.5 : 12),
+        new Vector3(0, 0, size.width >= 640 ? 6.5 : 12),
         0.003
       );
       camera.updateProjectionMatrix();
