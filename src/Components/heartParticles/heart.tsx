@@ -18,7 +18,6 @@ const Heart = () => {
   const particlesProperty = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
-    const scale = new Float32Array(count * 3);
 
     // sphere
     for (let i = 0; i < count; i++) {
@@ -48,38 +47,23 @@ const Heart = () => {
     return { positions, colors };
   }, [count]);
 
-  //   useFrame((state) => {
-  //     const { clock } = state;
-  //     if (points.current) {
-  //       (points.current?.geometry as any).rotateY *= Math.sin(
-  //         clock.getElapsedTime()
-  //       );
-  //     }
+  useFrame((state) => {
+    const { clock } = state;
+    points.current?.rotation.set(
+      0,
+      Math.sin(clock.getElapsedTime() * 0.2) / 9,
+      0
+    );
 
-  //   for (let i = 0; i < count; i++) {
-  //     const i3 = i * 3;
-
-  //     (points.current?.geometry.attributes.position.array as number[])[
-  //       i3 + 1
-  //     ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
-  //     (points.current?.geometry.attributes.position.array as number[])[
-  //       i3 + 2
-  //     ] += Math.cos(clock.elapsedTime) * Math.random() * 0.001;
-  //   }
-
-  //     (
-  //       points.current?.geometry.attributes as unknown as any
-  //     ).position.needsUpdate = true;
-  //   });
+    (
+      points.current?.geometry.attributes as unknown as any
+    ).position.needsUpdate = true;
+  });
 
   return (
     <>
       {/* <ambientLight intensity={1} color="white" /> */}
-      <points
-        ref={points}
-        //   rotation={[0, -Math.PI / 2, 0]}
-        scale={0.1}
-      >
+      <points ref={points} rotation={[Math.PI / 5, 0, Math.PI / 5]} scale={0.1}>
         <bufferGeometry>
           <bufferAttribute
             attach={"attributes-position"}

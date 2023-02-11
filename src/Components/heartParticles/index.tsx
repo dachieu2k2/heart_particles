@@ -17,8 +17,8 @@ const HeartParticles = () => {
 
   const [colorMap] = useLoader(TextureLoader, ["./textures/heart.png"]);
 
-  const count = 30000;
-  const radius = 8;
+  const count = 25000;
+  const radius = 10;
   const particlesProperty = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
@@ -55,42 +55,31 @@ const HeartParticles = () => {
 
   useFrame((state) => {
     const { clock } = state;
-    //   (points.current?.material as ShaderMaterial).uniforms.uTime.value =
-    //     clock.getElapsedTime();
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
 
-      const x = points.current!.geometry.attributes.position.array[i3 + 0];
-      const y = points.current!.geometry.attributes.position.array[i3 + 1];
-      const z = points.current!.geometry.attributes.position.array[i3 + 2];
+      if (points.current) {
+        const x = points.current.geometry.attributes.position.array[i3 + 0];
+        const y = points.current.geometry.attributes.position.array[i3 + 1];
+        const z = points.current.geometry.attributes.position.array[i3 + 2];
 
-      // (points.current?.geometry.attributes.position.array as number[])[
-      //   i3 + 0
-      // ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
-      // (points.current?.geometry.attributes.position.array as number[])[
-      //   i3 + 1
-      // ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
-      // (points.current?.geometry.attributes.position.array as number[])[
-      //   i3 + 1
-      // ] += Math.sin(clock.elapsedTime) * Math.random() * 0.001;
-      // (points.current?.geometry.attributes.position.array as number[])[
-      //   i3 + 2
-      // ] += Math.cos(clock.elapsedTime) * Math.random() * 0.001;
+        const distanceFactor =
+          radius - Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+        const angle =
+          (clock.getElapsedTime() - clock.getDelta()) *
+          0.00002 *
+          distanceFactor;
+        const s = Math.sin(angle);
+        const c = Math.cos(angle);
 
-      const distanceFactor =
-        radius - Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
-      const angle = clock.getElapsedTime() * 0.000002 * distanceFactor;
-      const s = Math.sin(angle);
-      const c = Math.cos(angle);
-      // console.log(angle);
-
-      (points.current!.geometry.attributes.position.array[i3 + 0] as number) =
-        x * c + y * 0 + z * s;
-      (points.current!.geometry.attributes.position.array[i3 + 1] as number) =
-        x * 0.0 + y * 1 + z * 0;
-      (points.current!.geometry.attributes.position.array[i3 + 2] as number) =
-        x * -s + y * 0 + z * c;
+        (points.current.geometry.attributes.position.array[i3 + 0] as number) =
+          x * c + y * 0 + z * s;
+        (points.current.geometry.attributes.position.array[i3 + 1] as number) =
+          x * 0 + y * 1 + z * 0;
+        (points.current.geometry.attributes.position.array[i3 + 2] as number) =
+          x * -s + y * 0 + z * c;
+      }
     }
 
     (
@@ -98,23 +87,31 @@ const HeartParticles = () => {
     ).position.needsUpdate = true;
   });
 
-  useFrame(({ camera, mouse, size }) => {
-    // console.log(size);
+  // useFrame(({ camera, mouse, size }) => {
+  //   // console.log(size);
 
-    if (points.current) {
-      camera.lookAt(points.current.position);
-      camera.position.lerp(
-        new Vector3(0, 0, size.width >= 640 ? 6.5 : 12),
-        0.003
-      );
-      camera.updateProjectionMatrix();
-    } else {
-    }
-    camera.position.lerp(
-      new Vector3(mouse.x * 1.5, mouse.y * 1.5, camera.position.z),
-      0.02
-    );
-  });
+  //   if (points.current) {
+  //     // camera.lookAt(points.current.position);
+  //     camera.lookAt(new Vector3(0, 0, -12));
+  //     camera.position.lerp(
+  //       new Vector3(0, 0, size.width >= 640 ? 6.5 : -12),
+  //       0.003
+  //     );
+  //     // camera.position.set()
+  //     // camera.position.set(0, 0, size.width >= 640 ? 6.5 : 12);
+
+  //     // camera.position.lerp(
+  //     //   new Vector3(0, 0, size.width >= 640 ? 6.5 : 12),
+  //     //   0.003
+  //     // );
+  //     camera.updateProjectionMatrix();
+  //   } else {
+  //   }
+  //   camera.position.lerp(
+  //     new Vector3(mouse.x * 1.5, mouse.y * 1.5, camera.position.z),
+  //     0.02
+  //   );
+  // });
 
   // useEffect(() => {
   //   console.log(points.current);
