@@ -67,9 +67,7 @@ const HeartParticles = () => {
         const distanceFactor =
           radius - Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
         const angle =
-          (clock.getElapsedTime() - clock.getDelta()) *
-          0.00002 *
-          distanceFactor;
+          ((clock.getElapsedTime() / 10) % 10) * 0.0002 * distanceFactor;
         const s = Math.sin(angle);
         const c = Math.cos(angle);
 

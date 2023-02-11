@@ -7,7 +7,10 @@ import BoxParticles from "./Components/BoxParticles";
 import HeartParticles from "./Components/heartParticles";
 import Heart from "./Components/heartParticles/heart";
 import { Vector3 } from "three";
-import { useSpring, a, config, easings } from "@react-spring/three";
+import { useSpring, a, config, animated } from "@react-spring/three";
+import click from "../src/click.mp3";
+import cute from "../src/cute.mp3";
+import React from "react";
 
 const t = new Vector3();
 
@@ -101,14 +104,32 @@ const AnimationCamera: React.FC<{ index: number }> = ({ index }) => {
 
 function App() {
   const [index, setIndex] = useState(0);
+  const audio = new Audio(click);
+  const cuteMusic = new Audio(cute);
+  cuteMusic.loop = true;
+  // console.log(audio);
+  // console.log("adsasd");
 
   return (
     <>
       {
         <div className="container">
+          {/* <animated.div>
+            <animated.span>a</animated.span>
+          </animated.div> */}
           {cameraPositionSetting[index].overlay}
           {index < 2 && (
-            <div className="button" onClick={() => setIndex(index + 1)}>
+            <div
+              className="button"
+              onClick={() => {
+                audio.play();
+
+                if (index === cameraPositionSetting.length - 2) {
+                  cuteMusic.play();
+                }
+                setIndex(index + 1);
+              }}
+            >
               Continue...
             </div>
           )}
@@ -118,53 +139,59 @@ function App() {
         // camera={{ fov: 45, position: [0, 0, -20] }}
         gl={{ antialias: false }}
       >
-        <AnimationCamera index={index} />
-        {/* <Plane /> */}
-        {/* <Blob /> */}
-        {/* <BoxParticles /> */}
-        <Environment preset="sunset" />
-        <Float
-          position={[0, 0, 0]}
-          speed={2}
-          // rotationIntensity={2}
-          floatIntensity={2}
-        >
-          {index === 0 && (
-            <mesh position={[0, 0, 10]}>
-              <sphereGeometry args={[1, 20]} />
-              <meshPhysicalMaterial color="white" />
-            </mesh>
-          )}
+        <React.Suspense fallback={null}>
+          <AnimationCamera index={index} />
+          {/* <Plane /> */}
+          {/* <Blob /> */}
+          {/* <BoxParticles /> */}
+          <Environment preset="sunset" />
+          <Float
+            position={[0, 0, 0]}
+            speed={2}
+            // rotationIntensity={2}
+            floatIntensity={2}
+          >
+            {index === 0 && (
+              <mesh position={[0, 0, 10]}>
+                <sphereGeometry args={[1, 20]} />
+                <meshPhysicalMaterial color="white" />
+              </mesh>
+            )}
 
-          {index === 1 && (
-            <mesh position={[0, 0, 5]} scale={0.1}>
-              <torusGeometry args={[5, 2]} />
-              <meshPhysicalMaterial color="white" />
-            </mesh>
+            {index === 1 && (
+              <mesh position={[0, 0, 5]} scale={0.1}>
+                <torusGeometry args={[5, 2]} />
+                <meshPhysicalMaterial color="white" />
+              </mesh>
+            )}
+          </Float>
+          {index === 2 && (
+            <>
+              <Heart />
+              <HeartParticles />
+            </>
           )}
-        </Float>
-        {index === 2 && (
-          <>
-            <Heart />
-            <HeartParticles />
-          </>
-        )}
-        (
-        <Stars
-          radius={500}
-          depth={50}
-          count={5000}
-          factor={4}
-          saturation={0}
-          fade
-          speed={1}
-        />
-        )
-        <OrbitControls
-        // enableZoom={false}
-        // autoRotate
-        />
-        {/* <axesHelper /> */}
+          (
+          <Stars
+            radius={500}
+            depth={50}
+            count={5000}
+            factor={4}
+            saturation={0}
+            fade
+            speed={1}
+          />
+          )
+          <OrbitControls
+            // minAzimuthAngle={-Math.PI / 4}
+            // maxAzimuthAngle={Math.PI / 4}
+            // minPolarAngle={Math.PI / 6}
+            // maxPolarAngle={Math.PI - Math.PI / 6}
+            enableZoom={false}
+            // autoRotate
+          />
+          {/* <axesHelper /> */}
+        </React.Suspense>
       </Canvas>
     </>
   );
