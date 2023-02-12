@@ -7,7 +7,7 @@ import BoxParticles from "./Components/BoxParticles";
 import HeartParticles from "./Components/heartParticles";
 import Heart from "./Components/heartParticles/heart";
 import { Vector3 } from "three";
-import { useSpring, a, config, animated } from "@react-spring/three";
+import { useSpring, a, config } from "@react-spring/three";
 import click from "../src/click.mp3";
 import cute from "../src/cute.mp3";
 import React from "react";
@@ -31,12 +31,28 @@ const farAway = {
 
 const cameraPositionSetting = [
   {
+    position: [0, 0, 40],
+    positionLaptop: [0, 0, 40],
+    target: [0, 0, 40],
+    config: config.default,
+    overlay: <div className="text">It’s my happiness to see your smile...</div>,
+  },
+  {
+    position: [0, 0, 30],
+    positionLaptop: [0, 0, 30],
+    target: [0, 0, 30],
+    config: config.default,
+    overlay: (
+      <div className="text">Wish my love a happy Valentine’s Day...</div>
+    ),
+  },
+  {
     position: [0, 0, 20],
     positionLaptop: [0, 0, 20],
     target: [0, 0, 20],
     config: config.default,
     overlay: (
-      <div className="text">Best wishes to the other half of my life...</div>
+      <div className="text">and always have a smile on your lips...</div>
     ),
   },
   {
@@ -109,6 +125,13 @@ function App() {
   cuteMusic.loop = true;
   // console.log(audio);
   // console.log("adsasd");
+  const [props, api] = useSpring(
+    () => ({
+      from: { opacity: 0 },
+      to: { opacity: 1 },
+    }),
+    []
+  );
 
   return (
     <>
@@ -117,8 +140,9 @@ function App() {
           {/* <animated.div>
             <animated.span>a</animated.span>
           </animated.div> */}
+          {/* <a.div style={props}>Hello World</a.div> */}
           {cameraPositionSetting[index].overlay}
-          {index < 2 && (
+          {index < cameraPositionSetting.length - 1 && (
             <div
               className="button"
               onClick={() => {
@@ -152,20 +176,32 @@ function App() {
             floatIntensity={2}
           >
             {index === 0 && (
+              <mesh position={[0, 0, 20]} scale={1}>
+                <boxGeometry args={[3, 3, 3]} />
+                <meshPhysicalMaterial color="hotpink" />
+              </mesh>
+            )}
+            {index === 1 && (
+              <mesh position={[0, 0, 15]} scale={0.3}>
+                <coneGeometry args={[5, 10]} />
+                <meshPhysicalMaterial color="#03C988" />
+              </mesh>
+            )}
+            {index === 2 && (
               <mesh position={[0, 0, 10]}>
                 <sphereGeometry args={[1, 20]} />
-                <meshPhysicalMaterial color="white" />
+                <meshPhysicalMaterial color="#3C84AB" />
               </mesh>
             )}
 
-            {index === 1 && (
+            {index === 3 && (
               <mesh position={[0, 0, 5]} scale={0.1}>
                 <torusGeometry args={[5, 2]} />
-                <meshPhysicalMaterial color="white" />
+                <meshPhysicalMaterial color="#C3ACD0" />
               </mesh>
             )}
           </Float>
-          {index === 2 && (
+          {index === cameraPositionSetting.length - 1 && (
             <>
               <Heart />
               <HeartParticles />
