@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Float, OrbitControls, Stars } from "@react-three/drei";
+import {
+  Environment,
+  Float,
+  OrbitControls,
+  PresentationControls,
+  Stars,
+} from "@react-three/drei";
 import BoxParticles from "./Components/BoxParticles";
 import HeartParticles from "./Components/heartParticles";
 import Heart from "./Components/heartParticles/heart";
@@ -218,6 +224,13 @@ function App() {
             speed={1}
           />
           )
+          <PresentationControls
+            global
+            zoom={0.3}
+            rotation={[0, 0, 0]}
+            polar={[0, 0]}
+            azimuth={[-Math.PI / 4, Math.PI / 4]}
+          ></PresentationControls>
           <OrbitControls
             // minAzimuthAngle={-Math.PI / 4}
             // maxAzimuthAngle={Math.PI / 4}
