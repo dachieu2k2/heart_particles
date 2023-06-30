@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Environment,
   Float,
+  Loader,
   OrbitControls,
   PresentationControls,
   Stars,
@@ -242,6 +243,7 @@ function App() {
           {/* <axesHelper /> */}
         </React.Suspense>
       </Canvas>
+      <Loader />
     </>
   );
 }
